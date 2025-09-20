@@ -45,10 +45,14 @@ fn write_toml(path: &Path, slug: &String, libraries: String) -> std::io::Result<
 }
 
 fn write_exercise(path: &Path, template: String) -> std::io::Result<()> {
-    dbg!(&path);
-    dbg!(&template);
+    let src_dir = path.join("src");
+    fs::create_dir_all(&src_dir)?;
+    let filename = src_dir.join("lib.rs");
+    let mut file = File::create(filename)?;
+    file.write_all(template.as_bytes())?;
     Ok(())
 }
+
 fn write_markdown(
     path: &Path,
     slug: &String,
