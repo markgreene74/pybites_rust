@@ -1,9 +1,11 @@
 // Download the exercises from https://rustplatform.com/
 // and make them available locally.
 
-use reqwest::Error;
+// use reqwest::Error;  // DEBUG
 use serde::Deserialize;
 use std::env;
+use std::fs;
+use std::path::Path;
 
 #[derive(Deserialize, Debug)]
 struct Bite {
@@ -21,6 +23,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // collect arguments
     let args: Vec<String> = env::args().collect();
+
+    // define the base path from args[0] / exercises
+    let base_path = Path::new(&args[0]).parent().unwrap().join("exercises");
+    fs::create_dir_all(&base_path)?;
 
     // send the request
     let client = reqwest::blocking::Client::new();
@@ -40,7 +46,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!();
 
     for bite in bites {
-        println!("{:#?}", bite.name);
+        print!("{:#?}", bite.name);
+        // do something
+        println!(" ✅");
     }
     Ok(())
 }
