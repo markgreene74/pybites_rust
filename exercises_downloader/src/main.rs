@@ -38,9 +38,18 @@ members = [\"adder\"]";
 }
 
 fn write_toml(path: &Path, slug: &String, libraries: String) -> std::io::Result<()> {
-    dbg!(&path);
-    dbg!(&slug);
-    dbg!(&libraries);
+    // exercise Cargo.toml template
+    let content = "[package]
+name = \"package_name\"
+version = \"0.1.0\"
+edition = \"2024\"
+[dependencies]\n"
+        .replace("package_name", slug.as_str());
+
+    let filename = path.join("Cargo.toml");
+    let mut file = File::create(filename)?;
+    file.write_all(content.as_bytes())?;
+    file.write_all(libraries.as_bytes())?;
     Ok(())
 }
 
