@@ -35,6 +35,7 @@ members = [\"adder\"]";
     let filename = path.join("Cargo.toml");
     let mut file = File::create(filename)?;
     file.write_all(content)?;
+
     Ok(())
 }
 
@@ -43,7 +44,7 @@ fn write_toml(path: &Path, slug: &String, libraries: String) -> std::io::Result<
     let content = "[package]
 name = \"package_name\"
 version = \"0.1.0\"
-edition = \"2024\"
+edition = \"2024\"\n
 [dependencies]\n"
         .replace("package_name", slug.as_str());
 
@@ -51,6 +52,7 @@ edition = \"2024\"
     let mut file = File::create(filename)?;
     file.write_all(content.as_bytes())?;
     file.write_all(libraries.as_bytes())?;
+
     Ok(())
 }
 
@@ -71,19 +73,33 @@ fn write_exercise(path: &Path, template: String) -> std::io::Result<()> {
 
     let mut file = File::create(filename)?;
     file.write_all(template.as_bytes())?;
+
     Ok(())
 }
 
 fn write_markdown(
     path: &Path,
-    slug: &String,
+    name: String,
     description: String,
+    level: String,
     author: String,
 ) -> std::io::Result<()> {
-    dbg!(&path);
-    dbg!(&slug);
-    dbg!(&description);
-    dbg!(&author);
+    // exercise markdown template
+    let content = "# package_name
+
+Level: package_level
+Author: package_author\n
+Instructions:
+package_description\n"
+        .replace("package_name", name.as_str())
+        .replace("package_description", description.as_str())
+        .replace("package_level", level.as_str())
+        .replace("package_author", author.as_str());
+
+    let filename = path.join("README.md");
+    let mut file = File::create(filename)?;
+    file.write_all(content.as_bytes())?;
+
     Ok(())
 }
 
@@ -127,13 +143,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // re-write/update the toml and md files but make a backup copy of the
         // exercise file if it exists, in case it was already solved
         write_toml(&exercise_path, &slug, bite.libraries)?;
-        write_markdown(&exercise_path, &slug, bite.description, bite.author)?;
+        write_markdown(
+            &exercise_path,
+            bite.name,
+            bite.description,
+            bite.level,
+            bite.author,
+        )?;
         write_exercise(&exercise_path, bite.template)?;
         println!(" ✅");
     }
 
     write_root_toml(&base_path)?;
 
-    // all done
     Ok(())
 }
