@@ -18,6 +18,10 @@ struct Bite {
     author: String,
 }
 
+fn write_root_toml(base_path: &Path) {
+    dbg!(base_path.join("Cargo.toml"));
+}
+
 fn write_toml(slug: &String, libraries: String) {
     dbg!(&slug);
     dbg!(&libraries);
@@ -33,11 +37,17 @@ fn write_markdown(slug: &String, description: String, author: String) {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    print!("Downloading the exercises from Pybites Rust ...");
+    // define the base_path (current directory / exercises)
+    let base_path = env::current_dir().unwrap().join("exercises");
+
+    print!("Downloading the exercises from Pybites Rust (rustplatform.com)");
     let client = reqwest::blocking::Client::new();
     let response = client.get("https://rustplatform.com/api/").send()?;
     println!(" ✅");
-    println!();
+    println!(
+        "'exercises' will be created in the current directory ({})",
+        base_path.display()
+    );
 
     // collect the arguments
     let args: Vec<String> = env::args().collect();
@@ -53,8 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("I found {:#?} exercises!", bites.len());
     println!();
 
-    // define the base path (args[0] / exercises)
-    let base_path = Path::new(&args[0]).parent().unwrap().join("exercises");
+    // make sure the base path (exercises) exists
     fs::create_dir_all(&base_path)?;
 
     for bite in bites {
@@ -62,18 +71,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let slug = bite.slug;
         let exercise_path = &base_path.join(&bite.level).join(&slug);
 
-        // create the directory and the exercise files (toml, rs)
+        // make sure the exercise directory exists
         fs::create_dir_all(&exercise_path)?;
-        // just re-write/update the toml and the md file but make
-        // a backup copy of the exercise file if it exists, in case
-        // it was already solved or if we want to keep an older version
+        // re-write/update the toml and md files but make  a backup copy of the
+        // exercise file if it exists, in case it was already solved
         write_toml(&slug, bite.libraries);
         write_markdown(&slug, bite.description, bite.author);
         write_exercise(bite.template);
         // TODO add error propagation ^^^
-
-        // all done
         println!(" ✅");
     }
+    write_root_toml(&base_path);
+    // TODO add error propagation ^^^
+
+    // all done
     Ok(())
 }
