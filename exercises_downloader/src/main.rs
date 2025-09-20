@@ -8,6 +8,7 @@ use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+use std::time::SystemTime;
 
 #[derive(Deserialize, Debug)]
 struct Bite {
@@ -57,6 +58,17 @@ fn write_exercise(path: &Path, template: String) -> std::io::Result<()> {
     let src_dir = path.join("src");
     fs::create_dir_all(&src_dir)?;
     let filename = src_dir.join("lib.rs");
+
+    if fs::exists(&filename)? {
+        // backup the original lib.rs (exercise file) by adding a UNIX_EPOCH timestamp after .rs
+        let now = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
+        let new_filename = &filename.with_extension(format!("rs.{}", now));
+        fs::rename(&filename, new_filename)?;
+    }
+
     let mut file = File::create(filename)?;
     file.write_all(template.as_bytes())?;
     Ok(())
