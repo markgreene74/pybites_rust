@@ -18,24 +18,32 @@ struct Bite {
     author: String,
 }
 
+fn write_toml(slug: &String, libraries: String) {
+    dbg!(&slug);
+    dbg!(&libraries);
+}
+
+fn write_exercise(template: String) {
+    dbg!(&template);
+}
+fn write_markdown(slug: &String, description: String, author: String) {
+    dbg!(&slug);
+    dbg!(&description);
+    dbg!(&author);
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Download the exercises from Pybites Rust");
-
-    // collect arguments
-    let args: Vec<String> = env::args().collect();
-
-    // define the base path from args[0] / exercises
-    let base_path = Path::new(&args[0]).parent().unwrap().join("exercises");
-    fs::create_dir_all(&base_path)?;
-
-    // send the request
+    print!("Downloading the exercises from Pybites Rust ...");
     let client = reqwest::blocking::Client::new();
     let response = client.get("https://rustplatform.com/api/").send()?;
-    println!("Status: {}", response.status()); // DEBUG
+    println!(" ✅");
     println!();
 
+    // collect the arguments
+    let args: Vec<String> = env::args().collect();
     // just testing, print out the status and headers and exit
     if args.contains(&String::from("--test")) {
+        println!("Status: {}", response.status());
         println!("Headers:\n{:#?}", response.headers());
         return Ok(());
     }
@@ -45,9 +53,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("I found {:#?} exercises!", bites.len());
     println!();
 
+    // define the base path (args[0] / exercises)
+    let base_path = Path::new(&args[0]).parent().unwrap().join("exercises");
+    fs::create_dir_all(&base_path)?;
+
     for bite in bites {
         print!("{:#?}", bite.name);
-        // do something
+        let slug = bite.slug;
+        let exercise_path = &base_path.join(&bite.level).join(&slug);
+
+        // create the directory and the exercise files (toml, rs)
+        fs::create_dir_all(&exercise_path)?;
+        // just re-write/update the toml and the md file but make
+        // a backup copy of the exercise file if it exists, in case
+        // it was already solved or if we want to keep an older version
+        write_toml(&slug, bite.libraries);
+        write_markdown(&slug, bite.description, bite.author);
+        write_exercise(bite.template);
+        // TODO add error propagation ^^^
+
+        // all done
         println!(" ✅");
     }
     Ok(())
