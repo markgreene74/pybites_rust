@@ -39,14 +39,14 @@ members = [\nworkspace_members]"
     Ok(())
 }
 
-fn write_toml(path: &Path, slug: &String, libraries: &String) -> std::io::Result<()> {
+fn write_toml(path: &Path, slug: &str, libraries: &String) -> std::io::Result<()> {
     // exercise Cargo.toml template
     let content = "[package]
 name = \"package_name\"
 version = \"0.1.0\"
 edition = \"2024\"\n
 [dependencies]\n"
-        .replace("package_name", slug.as_str());
+        .replace("package_name", slug);
 
     let filename = path.join("Cargo.toml");
     let mut file = File::create(filename)?;
@@ -79,10 +79,10 @@ fn write_exercise(path: &Path, template: &String) -> std::io::Result<()> {
 
 fn write_markdown(
     path: &Path,
-    name: &String,
-    description: &String,
-    level: &String,
-    author: &String,
+    name: &str,
+    description: &str,
+    level: &str,
+    author: &str,
 ) -> std::io::Result<()> {
     // exercise markdown template
     let content = "# package_name
@@ -91,10 +91,10 @@ fn write_markdown(
 - Author: package_author\n
 ## Instructions
 package_description\n"
-        .replace("package_name", name.as_str())
-        .replace("package_description", description.as_str())
-        .replace("package_level", level.as_str())
-        .replace("package_author", author.as_str());
+        .replace("package_name", name)
+        .replace("package_description", description)
+        .replace("package_level", level)
+        .replace("package_author", author);
 
     let filename = path.join("README.md");
     let mut file = File::create(filename)?;
@@ -136,21 +136,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for bite in &bites {
         print!("{:#?}", bite.name);
         let slug = &bite.slug;
-        let exercise_path = &base_path.join(&bite.level).join(&slug);
+        let exercise_path = &base_path.join(&bite.level).join(slug);
 
         // make sure the exercise directory exists
-        fs::create_dir_all(&exercise_path)?;
+        fs::create_dir_all(exercise_path)?;
         // re-write/update the toml and md files but make a backup copy of the
         // exercise file if it exists, in case it was already solved
-        write_toml(&exercise_path, &slug, &bite.libraries)?;
+        write_toml(exercise_path, slug, &bite.libraries)?;
         write_markdown(
-            &exercise_path,
+            exercise_path,
             &bite.name,
             &bite.description,
             &bite.level,
             &bite.author,
         )?;
-        write_exercise(&exercise_path, &bite.template)?;
+        write_exercise(exercise_path, &bite.template)?;
         println!(" ✅");
     }
 
