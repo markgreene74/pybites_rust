@@ -1,0 +1,58 @@
+name: "Rust - exercise_downloader (fmt, clippy, build, test)"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: read
+
+
+defaults:
+  run:
+    working-directory: ./exercises_downloader
+
+jobs:
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check the rustup version
+      run: rustup --version
+    - name: Clippy
+      run: cargo clippy -- --deny warnings
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check the rustup version
+      run: rustup --version
+    - name: rustfmt
+      run: cargo fmt --all --check
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Check the rustup version
+      run: rustup --version
+    # - name: Build
+    #   run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
