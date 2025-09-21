@@ -20,15 +20,6 @@ defaults:
 
 jobs:
 
-  clippy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Check the rustup version
-      run: rustup --version
-    - name: Clippy
-      run: cargo clippy -- --deny warnings
-
   fmt:
     runs-on: ubuntu-latest
     steps:
@@ -37,6 +28,23 @@ jobs:
       run: rustup --version
     - name: rustfmt
       run: cargo fmt --all --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Check the rustup version
+      run: rustup --version
+    - name: Clippy
+      run: cargo clippy -- --deny warnings
 
   build:
     runs-on: ubuntu-latest
