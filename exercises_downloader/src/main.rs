@@ -22,12 +22,7 @@ struct Bite {
 
 fn write_root_toml(path: &Path, all_slugs: String) -> std::io::Result<()> {
     // main Cargo.toml template
-    let content = "[package]
-name = \"exercises\"
-version = \"0.1.0\"
-edition = \"2024\"\
-\n
-[workspace]
+    let content = "[workspace]
 resolver = \"3\"
 members = [\nworkspace_members]"
         .replace("workspace_members", &all_slugs);
@@ -156,7 +151,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let all_slugs = bites
         .iter()
-        .map(|bite| String::from("    \"") + bite.slug.clone().as_str() + "\",\n")
+        .map(|bite| {
+            String::from("    \"")
+                + bite.level.clone().as_str()
+                + "/"
+                + bite.slug.clone().as_str()
+                + "\",\n"
+        })
         .collect::<String>();
     write_root_toml(&base_path, all_slugs)?;
 
