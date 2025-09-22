@@ -96,7 +96,7 @@ package_description\n"
         .replace("package_level", level)
         .replace("package_author", author);
 
-    let filename = path.join("README.md");
+    let filename = path.join("bite.md");
     let mut file = File::create(filename)?;
     file.write_all(content.as_bytes())?;
 
