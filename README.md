@@ -3,7 +3,7 @@ Exercise downloader for https://rustplatform.com/
 
 ## quickstart
 
-- install the `exercise_downloader` directly from GitHub, open a terminal and run:
+- install the exercise downloader directly from GitHub, open a terminal and run:
     ```shell
     cargo install --git https://github.com/markgreene74/pybites_rust.git
     ```
@@ -20,7 +20,7 @@ Maybe you want to have a look at the code, make some changes, try something new.
 - clone the repo and cd to the directory project
 - compile the downloader
     ```shell
-    cd exercises_downloader && \
+    cd exercise_downloader && \
         cargo build --release
     ```
 - cd back to the project main directory
@@ -29,7 +29,7 @@ Maybe you want to have a look at the code, make some changes, try something new.
     ```
 - run the downloader from the project main directory
     ```shell
-    ./exercises_downloader/target/release/pybites-rust-download
+    ./exercise_downloader/target/release/pybites-rust-download
     ```
 - the downloader will create `exercises` in the current directory
 
@@ -50,7 +50,7 @@ Using `cargo` to install it from GitHub.
 (...)
 
 
-   Compiling pybites-rust-download v0.1.2 (/my/home/.cargo/git/checkouts/pybites_rust-b497f94da89af8aa/d1afb2e/pybites-rust-download)
+   Compiling pybites-rust-download v0.1.2 (/my/home/.cargo/git/checkouts/pybites_rust-b497f94da89af8aa/d1afb2e/excercise_downloader)
     Finished `release` profile [optimized] target(s) in 15.61s
   Installing /my/home/.cargo/bin/pybites-rust-download
    Installed package `pybites-rust-download v0.1.0 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)` (executable `pybites-rust-download`)                                                                                                /15.8s
@@ -63,10 +63,10 @@ Using `make` to compile and execute the exercise downloader.
 ```shell
 ➜ make download-exercises
 make build-executable && \
-exercises_downloader/target/release/pybites-rust-download && \
+exercise_downloader/target/release/pybites-rust-download && \
 echo ... all done
 make[1]: Entering directory '/my/home/github/pybites_rust'
-cd exercises_downloader && \
+cd exercise_downloader && \
 cargo build --release
     Finished `release` profile [optimized] target(s) in 0.06s
 make[1]: Leaving directory '/my/home/github/pybites_rust'
