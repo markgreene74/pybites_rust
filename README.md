@@ -10,7 +10,7 @@ Exercise downloader for https://rustplatform.com/
 - cd to the directory where you want to save the exercises
 - run the downloader
     ```shell
-    exercises_downloader
+    pybites-rust-download
     ```
 
 ## compile it manually
@@ -29,7 +29,7 @@ Maybe you want to have a look at the code, make some changes, try something new.
     ```
 - run the downloader from the project main directory
     ```shell
-    ./exercises_downloader/target/release/exercises_downloader
+    ./exercises_downloader/target/release/pybites-rust-download
     ```
 - the downloader will create `exercises` in the current directory
 
@@ -45,15 +45,15 @@ Using `cargo` to install it from GitHub.
 ```shell
 ➜ cargo install --git https://github.com/markgreene74/pybites_rust.git
     Updating git repository `https://github.com/markgreene74/pybites_rust.git`
-  Installing exercises_downloader v0.1.0 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)
+  Installing pybites-rust-download v0.1.2 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)
 
 (...)
 
 
-   Compiling exercises_downloader v0.1.0 (/my/home/.cargo/git/checkouts/pybites_rust-b497f94da89af8aa/d1afb2e/exercises_downloader)
+   Compiling pybites-rust-download v0.1.2 (/my/home/.cargo/git/checkouts/pybites_rust-b497f94da89af8aa/d1afb2e/pybites-rust-download)
     Finished `release` profile [optimized] target(s) in 15.61s
-  Installing /my/home/.cargo/bin/exercises_downloader
-   Installed package `exercises_downloader v0.1.0 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)` (executable `exercises_downloader`)                                                                                                /15.8s
+  Installing /my/home/.cargo/bin/pybites-rust-download
+   Installed package `pybites-rust-download v0.1.0 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)` (executable `pybites-rust-download`)                                                                                                /15.8s
 
 ➜
 ```
@@ -63,7 +63,7 @@ Using `make` to compile and execute the exercise downloader.
 ```shell
 ➜ make download-exercises
 make build-executable && \
-exercises_downloader/target/release/exercises_downloader && \
+exercises_downloader/target/release/pybites-rust-download && \
 echo ... all done
 make[1]: Entering directory '/my/home/github/pybites_rust'
 cd exercises_downloader && \

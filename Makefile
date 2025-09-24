@@ -6,5 +6,5 @@ build-executable:
 .PHONY: download-exercises
 download-exercises:
 	$(MAKE) build-executable && \
-	exercises_downloader/target/release/exercises_downloader && \
+	exercises_downloader/target/release/pybites-rust-download && \
 	echo ... all done
