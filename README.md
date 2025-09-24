@@ -1,23 +1,25 @@
-# pybites_rust - Exercise downloader
+# pybites_rust
+
+## Exercise downloader
 Exercise downloader for https://rustplatform.com/
 
-## quickstart
+### Quickstart
 
 - install the exercise downloader directly from GitHub, open a terminal and run:
     ```shell
     cargo install --git https://github.com/markgreene74/pybites_rust.git
     ```
-- cd to the directory where you want to save the exercises
+- `cd` to the directory where you want to save the exercises
 - run the downloader
     ```shell
     pybites-rust-download
     ```
 
-## compile it manually
+### Compile it manually
 
-Maybe you want to have a look at the code, make some changes, try something new.
+Maybe you want to have a look at the code and make some changes.
 
-- clone the repo and cd to the directory project
+- clone the repo and `cd` to the main directory of the project
 - compile the downloader
     ```shell
     cd exercise_downloader && \
@@ -33,14 +35,19 @@ Maybe you want to have a look at the code, make some changes, try something new.
     ```
 - the downloader will create `exercises` in the current directory
 
-Alternatively, use the Makefile
+### Makefile
+
+Alternatively, use the Makefile. Be aware that this will create `exercises` in the project main directory, where the `Makefile` is located.
+
 ```shell
 make download-exercises
 ```
 
-<details><summary>(Output example ...)</summary>
+### Examples
 
-Using `cargo` to install it from GitHub.
+<details><summary>(Open to see some output examples ...)</summary>
+
+Using `cargo` to install from GitHub.
 
 ```shell
 ➜ cargo install --git https://github.com/markgreene74/pybites_rust.git
@@ -53,7 +60,7 @@ Using `cargo` to install it from GitHub.
    Compiling pybites-rust-download v0.1.2 (/my/home/.cargo/git/checkouts/pybites_rust-b497f94da89af8aa/d1afb2e/excercise_downloader)
     Finished `release` profile [optimized] target(s) in 15.61s
   Installing /my/home/.cargo/bin/pybites-rust-download
-   Installed package `pybites-rust-download v0.1.0 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)` (executable `pybites-rust-download`)                                                                                                /15.8s
+   Installed package `pybites-rust-download v0.1.2 (https://github.com/markgreene74/pybites_rust.git#d1afb2ec)` (executable `pybites-rust-download`)                                                                                                /15.8s
 
 ➜
 ```
