@@ -16,7 +16,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./exercises_downloader
+    working-directory: ./exercise_downloader
 
 jobs:
 
