@@ -20,16 +20,62 @@ struct Bite {
     author: String,
 }
 
-fn write_root_toml(path: &Path, all_slugs: String) -> std::io::Result<()> {
+fn write_root_toml(path: &Path, bites: &[Bite]) -> std::io::Result<()> {
+    let workspace_members = bites
+        .iter()
+        .map(|bite| {
+            String::from("    \"")
+                + bite.level.clone().as_str()
+                + "/"
+                + bite.slug.clone().as_str()
+                + "\",\n"
+        })
+        .collect::<String>();
+
     // main Cargo.toml template
     let content = "[workspace]
 resolver = \"3\"
 members = [\nworkspace_members]"
-        .replace("workspace_members", &all_slugs);
+        .replace("workspace_members", &workspace_members);
 
     let filename = path.join("Cargo.toml");
     let mut file = File::create(filename)?;
     file.write_all(content.as_bytes())?;
+
+    Ok(())
+}
+
+fn write_root_readme(path: &Path, bites: &[Bite]) -> std::io::Result<()> {
+    // main README.md sections
+    let static_content = "# Pybites Rust\n
+https://rustplatform.com/
+\n
+## Exercises\n\n";
+    let content_by_level = "### Level: bite_level\nbites_by_level\n";
+
+    let filename = path.join("README.md");
+    let mut file = File::create(filename)?;
+    file.write_all(static_content.as_bytes())?;
+
+    let levels = vec!["intro", "easy", "medium"];
+    for level in levels {
+        let bites_by_level = bites
+            .iter()
+            .filter(|bite| bite.level == level)
+            .map(|bite| {
+                "- [bite_level/bite_slug](bite_level/bite_slug/bite.md)\n"
+                    .replace("bite_level", bite.level.clone().as_str())
+                    .replace("bite_slug", bite.slug.clone().as_str())
+            })
+            .collect::<String>();
+
+        file.write_all(
+            content_by_level
+                .replace("bite_level", level)
+                .replace("bites_by_level", &bites_by_level)
+                .as_bytes(),
+        )?;
+    }
 
     Ok(())
 }
@@ -149,17 +195,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!(" ✅");
     }
 
-    let all_slugs = bites
-        .iter()
-        .map(|bite| {
-            String::from("    \"")
-                + bite.level.clone().as_str()
-                + "/"
-                + bite.slug.clone().as_str()
-                + "\",\n"
-        })
-        .collect::<String>();
-    write_root_toml(&base_path, all_slugs)?;
+    write_root_toml(&base_path, &bites)?;
+    write_root_readme(&base_path, &bites)?;
 
     Ok(())
 }
