@@ -1,0 +1,27 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - snyk-bot
+      - dependabot
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - breaking-change
+    - title: Major Version Release 🆕
+      labels:
+        - Semver-Major
+        - major-version
+    - title: New Features 🎉
+      labels:
+        - Semver-Minor
+        - minor-version
+        - enhancement
+    - title: Documentation 📄
+      labels:
+        - documentation
+    - title: Other Changes
+      labels:
+        - "*"
+
